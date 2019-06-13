@@ -16,6 +16,11 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use( helmet( {
+  noCache       : true,
+  hidePoweredBy : { setTo: 'PHP 4.2.0' },
+  xssFilter     : true,
+} ) );
 
 //Index page (static HTML)
 app.route('/')
