@@ -55,7 +55,17 @@ suite('Functional Tests', function() {
       });
       
       test('Test POST /api/books with no title given', function(done) {
-        //done();
+        chai.request(server)
+          .post('/api/books')
+          .send({
+            title:''
+          })
+          .end(function(err, res) {
+            assert.equal(res.status, 400);
+            assert.isString(res.text)
+            assert.equal(res.text, 'Please enter title');
+            done();
+        });
       });
       
     });
