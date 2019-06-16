@@ -11,8 +11,11 @@
 var expect = require('chai').expect;
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
-const MONGODB_CONNECTION_STRING = process.env.DB;
-//Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
+var mongoose = require('mongoose');
+var collection = 'test';
+var Book = require('../models/Book').Book;
+
+mongoose.connect(process.env.DB + collection + "?retryWrites=true", {useNewUrlParser:true});
 
 module.exports = function (app) {
 
@@ -23,8 +26,18 @@ module.exports = function (app) {
     })
     
     .post(function (req, res){
-      var title = req.body.title;
-      //response will contain new book object including atleast _id and title
+      if(!req.body.title) {
+        res.status(400).send('Please enter title');
+      } else {
+        var title = req.body.title;
+        var newBook = new Book({title});
+        newBook.save().then(result => {
+          var {title, _id} = result;
+          res.status(200).json({title, _id});
+        }).catch(err => {
+          res.status(400).json(err);
+        })    
+      }        
     })
     
     .delete(function(req, res){
