@@ -105,9 +105,19 @@ suite('Functional Tests', function() {
       });
 
       test('Test GET /api/books/[id] with valid id in db',  function(done){
-        //done();
+        chai.request(server)
+        .get(`/api/books/${bookid}`)
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body, 'comments', 'Books in array should contain commentcount');
+          assert.property(res.body, 'title', 'Books in array should contain title');
+          assert.property(res.body, '_id', 'Books in array should contain _id');
+          assert.equal(res.body.title, 'This is my first book!')
+          assert.isArray(res.body.comments);
+          assert.equal(res.body._id, bookid)
+          done();
       });
-      
+    });
     });
 
 
