@@ -60,6 +60,15 @@ module.exports = function (app) {
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      Book.findById(bookid, '_id title comments', (err, doc) => {   
+        if(err) {
+          console.log(err);
+        }else if(!doc){
+          res.status(500).send('no book exists');
+        }else{
+          res.status(200).json(doc);
+        }
+      })
     })
     
     .post(function(req, res){
