@@ -10,6 +10,7 @@ var chaiHttp = require('chai-http');
 var chai = require('chai');
 var assert = chai.assert;
 var server = require('../server');
+var bookid = 0;
 
 chai.use(chaiHttp);
 
@@ -47,6 +48,7 @@ suite('Functional Tests', function() {
             title: 'This is my first book!'
           })
           .end(function(err, res) {
+            bookid = res.body._id;
             assert.equal(res.status, 200);
             assert.exists(res.body._id);
             assert.equal(res.body.title, 'This is my first book!');
