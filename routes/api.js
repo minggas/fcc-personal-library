@@ -23,6 +23,16 @@ module.exports = function (app) {
     .get(function (req, res){
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+    
+      Book.find({},(err, doc) => {
+        if(err) console.log(err);
+        const result = doc.map(book => {
+          const {_id, title, comments} = book;
+          const commentcount = comments.length;
+          return {_id, title, commentcount}
+    })
+        res.status(200).json(result);        
+      })
     })
     
     .post(function (req, res){
@@ -50,6 +60,15 @@ module.exports = function (app) {
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      Book.findById(bookid, '_id title comments', (err, doc) => {   
+        if(err) {
+          console.log(err);
+        }else if(!doc){
+          res.status(500).send('no book exists');
+        }else{
+          res.status(200).json(doc);
+        }
+      })
     })
     
     .post(function(req, res){
