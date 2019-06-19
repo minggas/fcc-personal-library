@@ -52,6 +52,10 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      Book.deleteMany({}, (err, del) => {
+        if(err) res.status(503).send('could not delete ');
+        res.status(200).send('delete successful');
+      })      
     });
 
 
