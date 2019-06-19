@@ -128,7 +128,17 @@ suite('Functional Tests', function() {
       });
       
     });
-
+    suite('DELETE', function() {
+      test('DELETE Book', function(done) {
+        chai.request(server)
+        .delete(`/api/books/${bookid}`)
+        .end(function(err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'delete successful');
+          done();
+        })
+      })
+    })  
   });  
 
 });

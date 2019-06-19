@@ -30,7 +30,7 @@ module.exports = function (app) {
           const {_id, title, comments} = book;
           const commentcount = comments.length;
           return {_id, title, commentcount}
-    })
+        })  
         res.status(200).json(result);        
       })
     })
@@ -52,6 +52,10 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      Book.deleteMany({}, (err, del) => {
+        if(err) res.status(503).send('could not delete ');
+        res.status(200).send('delete successful');
+      })      
     });
 
 
@@ -80,6 +84,10 @@ module.exports = function (app) {
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
+      Book.deleteOne({_id: bookid}, (err, result) => {
+        if(err) res.status(500).send('error on delete');
+        res.status(200).send('delete successful')        
+      })
     });
   
 };
