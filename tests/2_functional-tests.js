@@ -69,7 +69,6 @@ suite('Functional Tests', function() {
             done();
         });
       });
-      
     });
 
 
@@ -124,11 +123,27 @@ suite('Functional Tests', function() {
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
       test('Test POST /api/books/[id] with comment', function(done){
-        //done();
+        chai.request(server)
+        .post(`/api/books/${bookid}`)
+        .send({
+          comment: 'My first comment'
+        })
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body, 'comments', 'Books in array should contain commentcount');
+          assert.property(res.body, 'title', 'Books in array should contain title');
+          assert.property(res.body, '_id', 'Books in array should contain _id');
+          assert.equal(res.body.title, 'This is my first book!')
+          assert.isArray(res.body.comments);
+          assert.equal(res.body.comments[0], 'My first comment');
+          assert.equal(res.body._id, bookid)
+          done();
+        });
+      });      
       });
       
-    });
     suite('DELETE', function() {
+
       test('DELETE Book', function(done) {
         chai.request(server)
         .delete(`/api/books/${bookid}`)
