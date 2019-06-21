@@ -8,7 +8,7 @@ var BookSchema = new mongoose.Schema({
     minlength: 1,
     unique: true
   },
-  comments: [[{ body: String, date: Date }]]
+  comments: [String]
 })
 
 exports.Book = mongoose.model("Book", BookSchema);
