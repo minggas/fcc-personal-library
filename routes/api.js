@@ -78,7 +78,10 @@ module.exports = function (app) {
     .post(function(req, res){
       var bookid = req.params.id;
       var comment = req.body.comment;
-      //json res format same as .get
+      Book.findByIdAndUpdate(bookid, {$push : {comments: comment}}, {useFindAndModify: false, select: '_id title comments', "new": true, "upsert": true}, (err, doc) => {
+        if(err) console.log(err);
+        res.status(200).json(doc);        
+      })
     })
     
     .delete(function(req, res){
